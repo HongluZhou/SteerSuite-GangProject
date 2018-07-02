@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Filename: D:\playground\SteerSuite\steeropt\data\MonaLisa\MonaLisa.xml-->
+<!--Creation Date: 05.11.2016-04.07.29-->
+<!--Stores Optimization Parameters-->
+<parameterOptimitationExperiment>
+  <env_config>
+    <visibilityGraph>
+      <region>
+        <point>
+          <x>-10</x>
+          <y>0</y>
+          <z>-10</z>
+        </point>
+        <point>
+          <x>10</x>
+          <y>0</y>
+          <z>10</z>
+        </point>
+      </region>
+    </visibilityGraph>
+    <queryRegions>
+      <region>
+        <point>
+          <x>5</x>
+          <y>0</y>
+          <z>-2</z>
+        </point>
+        <point>
+          <x>9</x>
+          <y>0</y>
+          <z>2</z>
+        </point>
+      </region>
+    </queryRegions>
+    <referenceRegions>
+      <region>
+        <point>
+          <x>-9</x>
+          <y>0</y>
+          <z>-9</z>
+        </point>
+        <point>
+          <x>9</x>
+          <y>0</y>
+          <z>9</z>
+        </point>
+      </region>
+    </referenceRegions>
+    <parameter type="float" name="p-2">
+      <min type="float">-5.000000064</min>
+      <max type="float">5.000000064</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>1</x>
+        <y>0</y>
+        <z>0</z>
+      </translationDirection>
+      <node_ids>
+        <node>4</node>
+        <node>5</node>
+      </node_ids>
+    </parameter>
+    <parameter type="float" name="p-2">
+      <min type="float">-5.000000064</min>
+      <max type="float">5.000000064</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>1</x>
+        <y>0</y>
+        <z>0</z>
+      </translationDirection>
+      <node_ids>
+        <node>6</node>
+        <node>7</node>
+      </node_ids>
+    </parameter>
+    <parameter type="float" name="p-2">
+      <min type="float">-5.000000064</min>
+      <max type="float">5.000000064</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>1</x>
+        <y>0</y>
+        <z>0</z>
+      </translationDirection>
+      <node_ids>
+        <node>8</node>
+        <node>9</node>
+      </node_ids>
+    </parameter>
+  </env_config>
+</parameterOptimitationExperiment>

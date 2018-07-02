@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Filename: D:\playground\SteerSuite\build\bin\maze_simple_revit_config.xml-->
+<!--Creation Date: 10.25.2016-10.20.50-->
+<!--Stores Optimization Parameters-->
+<parameterOptimitationExperiment>
+  <env_config>
+    <visibilityGraph>
+      <region>
+        <point>
+          <x>-4.49520899805239</x>
+          <y>0</y>
+          <z>-23.2165643201124</z>
+        </point>
+        <point>
+          <x>10.752791147529</x>
+          <y>0</y>
+          <z>-7.96856393611243</z>
+        </point>
+      </region>
+    </visibilityGraph>
+    <queryRegions>
+      <region>
+        <point>
+          <x>-2.843056</x>
+          <y>0</y>
+          <z>-21.61354</z>
+        </point>
+        <point>
+          <x>9.140155</x>
+          <y>0</y>
+          <z>-9.587608</z>
+        </point>
+      </region>
+    </queryRegions>
+    <parameter type="float" name="p-1">
+      <min type="float">-1.750000064</min>
+      <max type="float">1.750000064</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>0</x>
+        <y>0</y>
+        <z>1</z>
+      </translationDirection>
+      <node_ids>
+        <node>7</node>
+        <node>8</node>
+      </node_ids>
+    </parameter>
+    <parameter type="float" name="p-2">
+      <min type="float">-4.600000032</min>
+      <max type="float">4.600000032</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>0</x>
+        <y>0</y>
+        <z>1</z>
+      </translationDirection>
+      <node_ids>
+        <node>30</node>
+        <node>31</node>
+      </node_ids>
+    </parameter>
+    <parameter type="float" name="p-3">
+      <min type="float">-0.799999967999999</min>
+      <max type="float">0.799999967999999</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>0</x>
+        <y>0</y>
+        <z>-1</z>
+      </translationDirection>
+      <node_ids>
+        <node>15</node>
+        <node>16</node>
+      </node_ids>
+    </parameter>
+    <parameter type="float" name="p-4">
+      <min type="float">-0.95</min>
+      <max type="float">0.95</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>1</x>
+        <y>0</y>
+        <z>0</z>
+      </translationDirection>
+      <node_ids>
+        <node>14</node>
+        <node>15</node>
+      </node_ids>
+    </parameter>
+    <parameter type="float" name="p-5">
+      <min type="float">-1.45</min>
+      <max type="float">1.45</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>0</x>
+        <y>0</y>
+        <z>-1</z>
+      </translationDirection>
+      <node_ids>
+        <node>38</node>
+        <node>39</node>
+      </node_ids>
+    </parameter>
+    <parameter type="float" name="p-6">
+      <min type="float">-1.450000048</min>
+      <max type="float">1.450000048</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>0</x>
+        <y>0</y>
+        <z>1</z>
+      </translationDirection>
+      <node_ids>
+        <node>4</node>
+        <node>5</node>
+      </node_ids>
+    </parameter>
+    <parameter type="float" name="p-7">
+      <min type="float">-0.603928121962035</min>
+      <max type="float">0.603928121962035</max>
+      <original type="float">0</original>
+      <discretization type="float">20</discretization>
+      <translationDirection>
+        <x>-1</x>
+        <y>0</y>
+        <z>0</z>
+      </translationDirection>
+      <node_ids>
+        <node>6</node>
+        <node>5</node>
+        <node>7</node>
+        <node>26</node>
+        <node>27</node>
+      </node_ids>
+    </parameter>
+  </env_config>
+</parameterOptimitationExperiment>
