@@ -256,7 +256,7 @@ bool compareDist(std::pair<float, const SteerLib::AgentInterface *> a1,
 
 
 
-void RVO2DAgent::computeRangeMaps(std::string oneAgentLocation,float rangeLen)//honglu
+std::string RVO2DAgent::computeRangeMaps(std::string oneAgentLocation,float rangeLen)//honglu
 {
     std::stringstream oneAgentLocation_stream(oneAgentLocation);
     std::vector<float> oneAgentLocation_vec;
@@ -273,12 +273,29 @@ void RVO2DAgent::computeRangeMaps(std::string oneAgentLocation,float rangeLen)//
     oneAgentLocation_z=oneAgentLocation_vec.at(2);
     unsigned int randomNumber=1;
     computeNeighbors(randomNumber);
+    std::string Neighbors="";
+    for (size_t i = 0; i < obstacleNeighbors_.size(); ++i)
+    {
+//        std::cout << "obstacle_neighbor "<<i<<" out of "<<obstacleNeighbors_.size()<<" info:"<<std::endl;
+        const ObstacleInterface *obstacle1 = obstacleNeighbors_[i].second;
+        const ObstacleInterface *obstacle2 = obstacle1->nextObstacle_;
+        const ObstacleInterface *obstacle3 = obstacle2->nextObstacle_;
+        const ObstacleInterface *obstacle4 = obstacle3->nextObstacle_;
+        std::string thisNeighbor =  to_string(obstacle1->point_.x)+","+to_string(obstacle1->point_.y)+","+to_string(obstacle1->point_.z);
+        if (i == obstacleNeighbors_.size()-1)
+            Neighbors = Neighbors + thisNeighbor;
+        else
+            Neighbors = Neighbors + thisNeighbor+",";
+    }
+    std::cout<<"Neighbors: \n"<<Neighbors<<std::endl;
+    return Neighbors;
 
 }
 
+
 void RVO2DAgent::computeNeighbors(unsigned int frameNumber)
 {
-    std::cout << "11111111111"<<std::endl;
+    std::cout << "compute neighbors...."<<std::endl;
     int obstablce_id=0;
     std::set<SteerLib::ObstacleInterface *>::iterator obstacleIter;
     for (obstacleIter = getSimulationEngine()->getObstacles().begin(); obstacleIter!=getSimulationEngine()->getObstacles().end(); ++obstacleIter) {
@@ -816,7 +833,8 @@ void RVO2DAgent::updateAI(float timeStamp, float dt, unsigned int frameNumber)
 #ifdef _DEBUG_ENTROPY
 	std::cout << "Preferred velocity is: " << prefVelocity_ << std::endl;
 #endif
-	(this)->computeNeighbors(frameNumber);
+//    (this)->computeRangeMaps("1,0,4",13);//honglu-testing
+    (this)->computeNeighbors(frameNumber);//honglu-originialone
 	(this)->computeNewVelocity(dt);
 	// (this)->computeNewVelocity(dt);
 	_prefVelocity.y = 0.0f;

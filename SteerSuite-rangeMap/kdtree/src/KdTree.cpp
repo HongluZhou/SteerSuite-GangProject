@@ -229,66 +229,68 @@ void KdTree::buildObstacleTree()
 	// std::cout << "The number of obstacles in the scenario is:" << obstacles_.size() << std::endl;
 	// for (size_t i = 0; i < sim_->getObstacles().size(); ++i)
 	int i1 = 0;
-	//for(std::set<SteerLib::ObstacleInterface*>::const_iterator iter = sim_->getObstacles().begin(); iter != sim_->getObstacles().end(); iter++)
-    for(std::set<SteerLib::ObstacleInterface*>::const_iterator iter = sim_->getObstacles().begin(); iter != sim_->getObstacles().end(); iter++)
-	{
-        Util::AxisAlignedBox _bounds;
-        _bounds.xmin=1;//TODO honglu: change _bounds into what is in obstaclesBounds, then (*iter)->setBounds(_bounds) will modify current obstacle bounds into what we want
-        _bounds.xmax=2;
-        _bounds.ymin=0;
-        _bounds.ymax=1;
-        _bounds.zmin=1;
-        _bounds.zmax=2;
-        (*iter)->setBounds(_bounds);
-        //std::cout<<"(*iter)->getBounds():"<<(*iter)->getBounds()<<std::endl;
-		// convert SteerSuite Obstacle to RVO Obstacle
-		//AxisAlignedBox currObstacle = (*iter)->getBounds();//honglu change
-        AxisAlignedBox currObstacle = _bounds;
-		std::vector<Util::Point> vertices;
+    int obs_i=0;
+	for(std::set<SteerLib::ObstacleInterface*>::const_iterator iter = sim_->getObstacles().begin(); iter != sim_->getObstacles().end(); iter++)
+    {
+       if (obs_i < obs_num)
+       {
+           Util::AxisAlignedBox _bounds;
+           _bounds.xmin=obstaclesBounds.at(obs_i).xmin;//TODO honglu: change _bounds into what is in obstaclesBounds, then (*iter)->setBounds(_bounds) will modify current obstacle bounds into what we want
+           _bounds.xmax=obstaclesBounds.at(obs_i).xmax;
+           _bounds.ymin=obstaclesBounds.at(obs_i).ymin;
+           _bounds.ymax=obstaclesBounds.at(obs_i).ymax;
+           _bounds.zmin=obstaclesBounds.at(obs_i).zmin;
+           _bounds.zmax=obstaclesBounds.at(obs_i).zmax;
+           (*iter)->setBounds(_bounds);
+           //std::cout<<"(*iter)->getBounds():"<<(*iter)->getBounds()<<std::endl;
+           // convert SteerSuite Obstacle to RVO Obstacle
+           AxisAlignedBox currObstacle = (*iter)->getBounds();
+//          AxisAlignedBox currObstacle = _bounds;
+           std::vector<Util::Point> vertices;
 
-		vertices = (*iter)->get2DStaticGeometry();
-		// kdTree likes things in clock wise order.
-		std::reverse(vertices .begin(),vertices .end());
-		/*
-		 * Every vertex is considered an obstacle
-		 * Still obstacles inside the list reference the actual points that make
-		 * up the faces of the obstacle.
-		 */
+           vertices = (*iter)->get2DStaticGeometry();
+           // kdTree likes things in clock wise order.
+           std::reverse(vertices .begin(),vertices .end());
+           /*
+            * Every vertex is considered an obstacle
+            * Still obstacles inside the list reference the actual points that make
+            * up the faces of the obstacle.
+            */
 
-		const size_t obstacleNo = obstacles_.size();
+           const size_t obstacleNo = obstacles_.size();
 
-		for (size_t i = 0; i < vertices.size(); ++i)
-		{
-			ObstacleInterface *obstacle = new Obstacle();
-			obstacle->setBounds(currObstacle);
-			obstacle->point_ = vertices[i];
+           for (size_t i = 0; i < vertices.size(); ++i)
+           {
+               ObstacleInterface *obstacle = new Obstacle();
+               obstacle->setBounds(currObstacle);
+               obstacle->point_ = vertices[i];
 
-			if (i != 0)
-			{
-				obstacle->prevObstacle_ = obstacles_.back();
-				obstacle->prevObstacle_->nextObstacle_ = obstacle;
-			}
+               if (i != 0)
+               {
+                   obstacle->prevObstacle_ = obstacles_.back();
+                   obstacle->prevObstacle_->nextObstacle_ = obstacle;
+               }
 
-			if (i == vertices.size() - 1) {
-				obstacle->nextObstacle_ = obstacles_[obstacleNo];
-				obstacle->nextObstacle_->prevObstacle_ = obstacle;
-			}
+               if (i == vertices.size() - 1) {
+                   obstacle->nextObstacle_ = obstacles_[obstacleNo];
+                   obstacle->nextObstacle_->prevObstacle_ = obstacle;
+               }
 
-			obstacle->unitDir_ = normalize(vertices[(i == vertices.size() - 1 ? 0 : i + 1)] - vertices[i]);
+               obstacle->unitDir_ = normalize(vertices[(i == vertices.size() - 1 ? 0 : i + 1)] - vertices[i]);
 
-			if (vertices.size() == 2) {
-				obstacle->isConvex_ = true;
-			}
-			else {
+               if (vertices.size() == 2) {
+                   obstacle->isConvex_ = true;
+               }
+               else {
 				// obstacle->isConvex_ = (leftOf(vertices[(i == 0 ? vertices.size() - 1 : i - 1)], vertices[i], vertices[(i == vertices.size() - 1 ? 0 : i + 1)]) >= 0.0f);
-				obstacle->isConvex_ = (*iter)->isConvex_;
-			}
+                   obstacle->isConvex_ = (*iter)->isConvex_;
+               }
 
-			obstacle->id_ = obstacles_.size();
+               obstacle->id_ = obstacles_.size();
 
-			obstacles_.push_back(obstacle);
+               obstacles_.push_back(obstacle);
 			// std::cout << "Added an obstacle to the list of obstacles:" << obstacle->point_ << std::endl;
-		}
+           }
 
 		// Seems like for obstacles the x and z coordinates are backwards?
 		/*
@@ -325,7 +327,12 @@ void KdTree::buildObstacleTree()
 		// std
 		// obstacles[i] = obstacleTopLeft;
 		// std::cout << "Adding an obstacle to the list of obstacles:" << obstacles_[i]->point_ << std::endl;
-		i1++;
+           i1++;
+           obs_i++;
+       }
+       else
+           break;
+        
 	}
 	// std::cout << "This many obstacles were created:" << obstacles_.size() << std::endl;
 	obstacleTree_ = buildObstacleTreeRecursive(obstacles_);

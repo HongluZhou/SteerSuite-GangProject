@@ -112,7 +112,8 @@ void KdTreeDataBase::draw()
 void KdTreeDataBase::buildObstacleTree()
 {
 //    std::cout << "KdTreeDataBase::buildObstacleTree being called" << std::endl;//called
-	_spatialDatabase->buildObstacleTree();
+//    _spatialDatabase->getEnvironment("1,0,1,0,1,2,3");//honglu-testing
+    _spatialDatabase->buildObstacleTree();//honglu-originalone
 }
 
 void KdTreeDataBase::buildAgentTree()
