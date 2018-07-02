@@ -104,6 +104,8 @@ protected:
 	/**
 	 * \brief   Computes the neighbors of this agent.
 	 */
+    void computeRangeMaps(std::string oneAgentLocation,float rangeLen);//honglu
+    
 	void computeNeighbors(unsigned int frameNumber);
 
 	/**

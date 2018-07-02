@@ -30,6 +30,10 @@ using namespace Util;
 using namespace RVO2DGlobals;
 using namespace SteerLib;
 
+
+float oneAgentLocation_x;
+float oneAgentLocation_y;
+float oneAgentLocation_z;
 // #define _DEBUG_ENTROPY 1
 
 RVO2DAgent::RVO2DAgent()
@@ -250,24 +254,55 @@ bool compareDist(std::pair<float, const SteerLib::AgentInterface *> a1,
 		return a1.first < a2.first;
 	}
 
-//void RVO2DAgent::getEnvironment(environmentInfo)
-//{
-//    
-//}
-//
-//void RVO2DAgent::computeRangeMaps(oneAgentLocation,rangeLen)
-//{
-//    
-//}
+
+
+void RVO2DAgent::computeRangeMaps(std::string oneAgentLocation,float rangeLen)//honglu
+{
+    std::stringstream oneAgentLocation_stream(oneAgentLocation);
+    std::vector<float> oneAgentLocation_vec;
+    
+    
+    while( oneAgentLocation_stream.good() )
+    {
+        std::string substr;
+        getline( oneAgentLocation_stream, substr, ',' );
+        oneAgentLocation_vec.push_back(std::stof(substr));
+    }
+    oneAgentLocation_x=oneAgentLocation_vec.at(0);
+    oneAgentLocation_y=oneAgentLocation_vec.at(1);
+    oneAgentLocation_z=oneAgentLocation_vec.at(2);
+    
+
+}
 
 void RVO2DAgent::computeNeighbors(unsigned int frameNumber)
 {
+    std::cout << "11111111111"<<std::endl;
+    int obstablce_id=0;
+    std::set<SteerLib::ObstacleInterface *>::iterator obstacleIter;
+    for (obstacleIter = getSimulationEngine()->getObstacles().begin(); obstacleIter!=getSimulationEngine()->getObstacles().end(); ++obstacleIter) {
+        std::string obsinfo=std::to_string(obstablce_id)+'\t'+std::to_string((*obstacleIter)->getBounds().xmin)+'\t'+std::to_string((*obstacleIter)->getBounds().xmax)+'\t'+std::to_string((*obstacleIter)->getBounds().ymin)+'\t'+std::to_string((*obstacleIter)->getBounds().ymax)+'\t'+std::to_string((*obstacleIter)->getBounds().zmin)+'\t'+std::to_string((*obstacleIter)->getBounds().zmax);//honglu
+        std::cout << "obsinfo: "<<obsinfo<<std::endl;
+    
+        obstablce_id++;
+    }
+
+    std::cout<<"this->position().x:"<<this->position().x<<std::endl;
+    std::cout<<"this->position().y:"<<this->position().y<<std::endl;
+    std::cout<<"this->position().z:"<<this->position().z<<std::endl;
+    _position.x=oneAgentLocation_x;
+    _position.y=oneAgentLocation_y;
+    _position.z=oneAgentLocation_z;
+    std::cout<<"this->position().x:"<<this->position().x<<std::endl;
+    std::cout<<"this->position().y:"<<this->position().y<<std::endl;
+    std::cout<<"this->position().z:"<<this->position().z<<std::endl;
     struct timespec tn1;
     clock_gettime(CLOCK_REALTIME, &tn1);
     
 	obstacleNeighbors_.clear();
 	float rangeSq = sqr(_RVO2DParams.rvo_time_horizon_obstacles * _RVO2DParams.rvo_max_speed + _radius);
 	// dynamic_cast<RVO2DAIModule *>(rvoModule)->kdTree_->computeObstacleNeighbors(this, rangeSq);
+    rangeSq=1000;
 	getSimulationEngine()->getSpatialDatabase()->computeObstacleNeighbors(this, rangeSq);
 
     std::cout <<"Frame: "<<frameNumber<<", current agent "<<this->id()<<" neighbor obstacle info:"<< std::endl;

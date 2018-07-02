@@ -65,10 +65,16 @@
 #include <algorithm>
 #include "Obstacle.h"
 
+#include <iostream>
+#include <string>
+#include <sstream>
 
 const size_t RVO_MAX_LEAF_SIZE = 10;
 
 using namespace Util;
+
+std::vector<Util::AxisAlignedBox> obstaclesBounds;//honglu
+int obs_num;//honglu
 
 KdTree::KdTree(): obstacleTree_(NULL)
 {
@@ -82,6 +88,7 @@ KdTree::~KdTree()
 
 void KdTree::buildAgentTree()
 {
+//    std::cout<<"void KdTree::buildAgentTree()"<<std::endl;//called
 	// agents_ =  (sim_->getAgents());
 	agents_.clear();
 	for(unsigned int i = agents_.size() ; i < sim_->getAgents().size(); i++)
@@ -123,11 +130,13 @@ void KdTree::buildAgentTree()
 
 void KdTree::setSimulator(SteerLib::EngineInterface *sim_)
 {
+//    std::cout<<"void KdTree::setSimulator"<<std::endl;
 	this->sim_ = sim_;
 }
 
 void KdTree::buildAgentTreeRecursive(size_t begin, size_t end, size_t node)
 {
+//    std::cout<<"void KdTree::buildAgentTreeRecursive"<<std::endl;//called
 	agentTree_[node].begin = begin;
 	agentTree_[node].end = end;
 	// std::vector<RVO2DAgent *> * _agents = dynamic_cast<std::vector<RVO2DAgent *> *>(&agents_);
@@ -178,20 +187,63 @@ void KdTree::buildAgentTreeRecursive(size_t begin, size_t end, size_t node)
 	}
 }
 
+void KdTree::getEnvironment(std::string environmentInfo)//honglu
+{
+    std::stringstream environment_stream(environmentInfo);
+    std::vector<float> environment_vec;
+
+    
+    while( environment_stream.good() )
+    {
+        std::string substr;
+        getline( environment_stream, substr, ',' );
+        environment_vec.push_back(std::stof(substr));
+    }
+    obs_num=environment_vec.at(0);
+    
+    
+    for (int i = 1; i < environment_vec.size();i=i+6)
+    {
+        Util::AxisAlignedBox _bounds;
+        _bounds.xmin=environment_vec.at(i);
+        _bounds.xmax=environment_vec.at(i+1);
+        _bounds.ymin=environment_vec.at(i+2);
+        _bounds.ymax=environment_vec.at(i+3);
+        _bounds.zmin=environment_vec.at(i+4);
+        _bounds.zmax=environment_vec.at(i+5);
+        obstaclesBounds.push_back(_bounds);
+
+    }
+
+
+}
+
+
+
 void KdTree::buildObstacleTree()
 {
+//    std::cout<<"void KdTree::buildObstacleTree()"<<std::endl;//called
 	deleteObstacleTree(obstacleTree_);
 
 	std::vector<ObstacleInterface *> obstacles_;
 	// std::cout << "The number of obstacles in the scenario is:" << obstacles_.size() << std::endl;
 	// for (size_t i = 0; i < sim_->getObstacles().size(); ++i)
 	int i1 = 0;
-	for(std::set<SteerLib::ObstacleInterface*>::const_iterator iter = sim_->getObstacles().begin(); iter != sim_->getObstacles().end(); iter++)
+	//for(std::set<SteerLib::ObstacleInterface*>::const_iterator iter = sim_->getObstacles().begin(); iter != sim_->getObstacles().end(); iter++)
+    for(std::set<SteerLib::ObstacleInterface*>::const_iterator iter = sim_->getObstacles().begin(); iter != sim_->getObstacles().end(); iter++)
 	{
-
+        Util::AxisAlignedBox _bounds;
+        _bounds.xmin=1;
+        _bounds.xmax=2;
+        _bounds.ymin=0;
+        _bounds.ymax=1;
+        _bounds.zmin=1;
+        _bounds.zmax=2;
+        (*iter)->setBounds(_bounds);
+        //std::cout<<"(*iter)->getBounds():"<<(*iter)->getBounds()<<std::endl;
 		// convert SteerSuite Obstacle to RVO Obstacle
-		AxisAlignedBox currObstacle = (*iter)->getBounds();
-
+		//AxisAlignedBox currObstacle = (*iter)->getBounds();//honglu change
+        AxisAlignedBox currObstacle = _bounds;
 		std::vector<Util::Point> vertices;
 
 		vertices = (*iter)->get2DStaticGeometry();
@@ -281,6 +333,7 @@ void KdTree::buildObstacleTree()
 
 KdTree::ObstacleInterfaceTreeNode *KdTree::buildObstacleTreeRecursive(const std::vector<ObstacleInterface *> &obstacles)
 {
+//    std::cout<<"KdTree::ObstacleInterfaceTreeNode *KdTree::buildObstacleTreeRecursive"<<std::endl;//called
 	if (obstacles.empty()) {
 		return NULL;
 	}
@@ -405,11 +458,13 @@ KdTree::ObstacleInterfaceTreeNode *KdTree::buildObstacleTreeRecursive(const std:
 
 void KdTree::computeAgentNeighbors(SpatialDatabaseItemPtr agent, float rangeSq) const
 {
+//    std::cout<<"void KdTree::computeAgentNeighbors"<<std::endl;//called
 	queryAgentTreeRecursive(dynamic_cast<AgentInterface*>(agent), rangeSq, 0);
 }
 
 void KdTree::computeObstacleNeighbors(SpatialDatabaseItemPtr agent, float rangeSq) const
 {
+//    std::cout<<"void KdTree::computeObstacleNeighbors"<<std::endl;//called
 	dynamic_cast<AgentInterface*>(agent)->obstacleNeighbors_.clear();
 	// std::cout << " computing agent neighbours " << std::endl;
 	queryObstacleTreeRecursive(dynamic_cast<AgentInterface*>(agent), rangeSq, obstacleTree_);
@@ -419,6 +474,7 @@ void KdTree::computeObstacleNeighbors(SpatialDatabaseItemPtr agent, float rangeS
 
 void KdTree::deleteObstacleTree(ObstacleInterfaceTreeNode *node)
 {
+//    std::cout<<"void KdTree::deleteObstacleTree"<<std::endl;//called
 	if (node != NULL)
 	{
 		deleteObstacleTree(node->left);
@@ -430,6 +486,7 @@ void KdTree::deleteObstacleTree(ObstacleInterfaceTreeNode *node)
 
 void KdTree::queryAgentTreeRecursive(SteerLib::AgentInterface  *agent, float &rangeSq, size_t node) const
 {
+//    std::cout<<"void KdTree::queryAgentTreeRecursive"<<std::endl;//called
 	// std::cout << "agent tree size: " << agentTree_.size() << " number of agents " << agents_.size() << std::endl;
 
 	if (agentTree_[node].end - agentTree_[node].begin <= MAX_LEAF_SIZE) {
@@ -467,6 +524,7 @@ void KdTree::queryAgentTreeRecursive(SteerLib::AgentInterface  *agent, float &ra
 
 void KdTree::queryObstacleTreeRecursive(SteerLib::AgentInterface *agent, float rangeSq, const ObstacleInterfaceTreeNode *node) const
 {
+//    std::cout<<"void KdTree::queryObstacleTreeRecursive"<<std::endl;//called
 	if (node == NULL) {
 		return;
 	}
@@ -498,11 +556,13 @@ void KdTree::queryObstacleTreeRecursive(SteerLib::AgentInterface *agent, float r
 
 bool KdTree::queryVisibility(const Util::Point &q1, const Util::Point &q2, float radius) const
 {
+//    std::cout<<"bool KdTree::queryVisibility"<<std::endl;
 	return queryVisibilityRecursive(q1, q2, radius, obstacleTree_);
 }
 
 bool KdTree::queryVisibilityRecursive(const Util::Point &q1, const Util::Point &q2, float radius, const ObstacleInterfaceTreeNode *node) const
 {
+//    std::cout<<"bool KdTree::queryVisibilityRecursive"<<std::endl;
 	if (node == NULL) {
 		return true;
 	}

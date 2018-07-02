@@ -62,6 +62,7 @@ void KdTreeDataBaseModule::init( const SteerLib::OptionDictionary & options, Ste
 
 void KdTreeDataBaseModule::preprocessSimulation()
 {
+    std::cout<<"KdTreeDataBaseModule::preprocessSimulation()"<<std::endl;
 	this->_spatialDatabase->buildObstacleTree();
 }
 

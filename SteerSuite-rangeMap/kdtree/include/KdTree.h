@@ -172,6 +172,7 @@ public:
 	/**
 	 * \brief      Builds an obstacle <i>k</i>d-tree.
 	 */
+    void getEnvironment(std::string environmentInfo); //honglu
 	void buildObstacleTree();
 
 	ObstacleInterfaceTreeNode *buildObstacleTreeRecursive(const std::vector<ObstacleInterface *> &

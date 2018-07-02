@@ -37,6 +37,7 @@ void KdTreeDataBase::init()
 
 KdTreeDataBase::KdTreeDataBase(EngineInterface * gEngine, float xmin, float xmax, float zmin, float zmax)
 {
+//    std::cout << "KdTreeDataBase::KdTreeDataBase being called" << std::endl;//called
 	// this->_mesh = mesh;
 	this->_spatialDatabase = new KdTree();
 	this->_spatialDatabase->setSimulator(gEngine);
@@ -50,11 +51,13 @@ KdTreeDataBase::KdTreeDataBase(EngineInterface * gEngine, float xmin, float xmax
 
 KdTreeDataBase::~KdTreeDataBase()
 {
+//    std::cout << "KdTreeDataBase::~KdTreeDataBase() being called" << std::endl;//called
 	delete this->_spatialDatabase;
 }
 
 void KdTreeDataBase::getItemsInRange(std::set<SpatialDatabaseItemPtr> & neighborList, float xmin, float xmax, float zmin, float zmax, SpatialDatabaseItemPtr exclude)
 {
+//    std::cout << "KdTreeDataBase::getItemsInRange being called" << std::endl;
 	neighborList.clear();
 	// std::cout << "kdtree update agent neighbours" <<  " pointer " << this << std::endl;
 	AgentInterface * agent = dynamic_cast<AgentInterface*>(exclude);
@@ -88,11 +91,13 @@ void KdTreeDataBase::getItemsInRange(std::set<SpatialDatabaseItemPtr> & neighbor
 
 void KdTreeDataBase::getItemsInRange(std::set<SpatialDatabaseItemPtr> & neighborList, unsigned int xMinIndex, unsigned int xMaxIndex, unsigned int zMinIndex, unsigned int zMaxIndex, SpatialDatabaseItemPtr exclude)
 {
+//    std::cout << "KdTreeDataBase::getItemsInRange 2  being called" << std::endl;
 	this->getItemsInRange(neighborList, (float) xMinIndex, (float) xMaxIndex, (float) zMinIndex, (float) zMaxIndex, exclude);
 }
 
 void KdTreeDataBase::getItemsInVisualField(std::set<SpatialDatabaseItemPtr> & neighborList, float xmin, float xmax, float zmin, float zmax, SpatialDatabaseItemPtr exclude, const Util::Point & position, const Util::Vector & facingDirection, float radiusSquared)
 {
+//    std::cout << "KdTreeDataBase::getItemsInVisualField being called" << std::endl;
 	this->getItemsInRange(neighborList, xmin, xmax, zmin, zmax, exclude);
 }
 
@@ -106,16 +111,19 @@ void KdTreeDataBase::draw()
 
 void KdTreeDataBase::buildObstacleTree()
 {
+//    std::cout << "KdTreeDataBase::buildObstacleTree being called" << std::endl;//called
 	_spatialDatabase->buildObstacleTree();
 }
 
 void KdTreeDataBase::buildAgentTree()
 {
+//    std::cout << "KdTreeDataBase::buildAgentTree being called" << std::endl;//called
 	_spatialDatabase->buildAgentTree();
 }
 
 Util::Point KdTreeDataBase::randomPositionWithoutCollisions(float radius, bool excludeAgents)
 {
+//    std::cout << "KdTreeDataBase::randomPositionWithoutCollisions being called" << std::endl;
 	srand (static_cast <unsigned> (time(0)));
 
 	size_t numTries = 0;
@@ -183,12 +191,14 @@ Util::Point KdTreeDataBase::randomPositionWithoutCollisions(float radius, bool e
 /// Finds a random 2D point, within the specified region, that has no other objects within the requested radius.
 Util::Point KdTreeDataBase::randomPositionInRegionWithoutCollisions(const Util::AxisAlignedBox & region, float radius, bool excludeAgents)
 {
+//    std::cout << "KdTreeDataBase::randomPositionInRegionWithoutCollisions being called" << std::endl;
 	return Util::Point(0,0,0);
 }
 
 /// Finds a random 2D point, within the specified region, that has no other objects within the requested radius, using an exising (already seeded) Mersenne Twister random number generator.
 Util::Point KdTreeDataBase::randomPositionInRegionWithoutCollisions(const Util::AxisAlignedBox & region, float radius, bool excludeAgents, MTRand & randomNumberGenerator)
 {
+//    std::cout << "KdTreeDataBase::randomPositionInRegionWithoutCollisions 2 being called" << std::endl;
 	// srand (static_cast <unsigned> (time(0)));
 
 	bool found_hit = true;
@@ -257,6 +267,7 @@ Util::Point KdTreeDataBase::randomPositionInRegionWithoutCollisions(const Util::
 /// Finds a random 2D point, within the specified region, that has no other objects within the requested radius, using an exising (already seeded) Mersenne Twister random number generator.
 bool KdTreeDataBase::randomPositionInRegionWithoutCollisions(const Util::AxisAlignedBox & region, SpatialDatabaseItemPtr item, bool excludeAgents, MTRand & randomNumberGenerator)
 {
+//    std::cout << "KdTreeDataBase::randomPositionInRegionWithoutCollisions 3 being called" << std::endl;
 	return true;
 }
 
@@ -264,6 +275,7 @@ bool KdTreeDataBase::randomPositionInRegionWithoutCollisions(const Util::AxisAli
 /// Finds a random 2D point, within the specified region, using an exising (already seeded) Mersenne Twister random number generator.
 Util::Point KdTreeDataBase::randomPositionInRegion(const Util::AxisAlignedBox & region, float radius,MTRand & randomNumberGenerator)
 {
+//    std::cout << "KdTreeDataBase::randomPositionInRegion being called" << std::endl;
 	return Util::Point(0,0,0);
 }
 
@@ -276,6 +288,7 @@ Util::Point KdTreeDataBase::randomPositionInRegion(const Util::AxisAlignedBox & 
  */
 void KdTreeDataBase::computeAgentNeighbors(SpatialDatabaseItemPtr agent, float rangeSq) const
 {
+//    std::cout << "KdTreeDataBase::computeAgentNeighbors being called" << std::endl;//called
 	// std::cout << "Pointer to spatialDatabase: " << this << std::endl;
 	this->_spatialDatabase->computeAgentNeighbors(agent, rangeSq);
 }
@@ -288,12 +301,14 @@ void KdTreeDataBase::computeAgentNeighbors(SpatialDatabaseItemPtr agent, float r
  */
 void KdTreeDataBase::computeObstacleNeighbors(SpatialDatabaseItemPtr agent, float rangeSq) const
 {
+//    std::cout << "KdTreeDataBase::computeObstacleNeighbors being called" << std::endl;//called
 	this->_spatialDatabase->computeObstacleNeighbors(agent, rangeSq);
 }
 
 
 void KdTreeDataBase::clearDatabase()
 {
+//    std::cout << "KdTreeDataBase::clearDatabase being called" << std::endl;
 	this->_spatialDatabase->agents_.clear();
 	this->_spatialDatabase->agentTree_.clear();
 	// this->_spatialDatabase->deleteObstacleTree(this->_spatialDatabase->obstacleTree_);
@@ -301,6 +316,7 @@ void KdTreeDataBase::clearDatabase()
 
 void KdTreeDataBase::addObject( SpatialDatabaseItemPtr item, const Util::AxisAlignedBox & newBounds )
 {
+//    std::cout << "KdTreeDataBase::addObject being called" << std::endl;//called
 	if ( item->isAgent())
 	{
 		this->_spatialDatabase->agents_.push_back(dynamic_cast<AgentInterface *>(item));
@@ -316,6 +332,7 @@ void KdTreeDataBase::addObject( SpatialDatabaseItemPtr item, const Util::AxisAli
  */
 void KdTreeDataBase::removeObject( SpatialDatabaseItemPtr item, const Util::AxisAlignedBox &oldBounds )
 {
+    std::cout << "KdTreeDataBase::removeObject being called" << std::endl;
 	if ( item->isAgent())
 	{
 
@@ -346,6 +363,7 @@ void KdTreeDataBase::removeObject( SpatialDatabaseItemPtr item, const Util::Axis
  */
 bool KdTreeDataBase::trace(const Util::Ray & r, float & t, SpatialDatabaseItemPtr &hitObject, SpatialDatabaseItemPtr exclude, bool excludeAgents)
 {
+//    std::cout << "KdTreeDataBase::trace being called" << std::endl;//called
 	float current_closest_dist = 1000000.0f;
 	bool found_hit = false;
 	// std::cout << "Looking for obstacle colisions" << std::endl;
