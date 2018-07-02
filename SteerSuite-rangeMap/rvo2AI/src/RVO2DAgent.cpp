@@ -271,7 +271,8 @@ void RVO2DAgent::computeRangeMaps(std::string oneAgentLocation,float rangeLen)//
     oneAgentLocation_x=oneAgentLocation_vec.at(0);
     oneAgentLocation_y=oneAgentLocation_vec.at(1);
     oneAgentLocation_z=oneAgentLocation_vec.at(2);
-    
+    unsigned int randomNumber=1;
+    computeNeighbors(randomNumber);
 
 }
 

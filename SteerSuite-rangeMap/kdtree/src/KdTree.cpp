@@ -214,7 +214,7 @@ void KdTree::getEnvironment(std::string environmentInfo)//honglu
         obstaclesBounds.push_back(_bounds);
 
     }
-
+    buildObstacleTree();
 
 }
 
@@ -233,7 +233,7 @@ void KdTree::buildObstacleTree()
     for(std::set<SteerLib::ObstacleInterface*>::const_iterator iter = sim_->getObstacles().begin(); iter != sim_->getObstacles().end(); iter++)
 	{
         Util::AxisAlignedBox _bounds;
-        _bounds.xmin=1;
+        _bounds.xmin=1;//TODO honglu: change _bounds into what is in obstaclesBounds, then (*iter)->setBounds(_bounds) will modify current obstacle bounds into what we want
         _bounds.xmax=2;
         _bounds.ymin=0;
         _bounds.ymax=1;
